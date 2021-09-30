@@ -8,6 +8,7 @@ import java.security.Principal;
 import java.security.PublicKey;
 import java.security.SignatureException;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Adapts {@link java.security.cert.X509Certificate} to a {@link javax.security.cert.X509Certificate}.
@@ -17,6 +18,7 @@ final class CertificateAdapter extends javax.security.cert.X509Certificate {
   private final java.security.cert.X509Certificate delegate;
 
   CertificateAdapter(java.security.cert.X509Certificate delegate) {
+    Objects.requireNonNull(delegate, "delegate");
     this.delegate = delegate;
   }
 

@@ -8,7 +8,7 @@
   <inceptionYear>2021</inceptionYear>
   <url>https://github.com/marschall/legacy-compatibility-ssl-socket-factory</url>
   <name>Legacy Compatibility SSLSocketFactory</name>
-  <description>A SSLSocketFactory that implements SSLSession#getPeerCertificateChain.</description>
+  <description>A SSLSocketFactory that implements SSLSession.getPeerCertificateChain().</description>
   
   <developers>
     <developer>

@@ -3,6 +3,7 @@ package com.github.marschall.legacycompatibilitysslsocketfactory;
 import java.security.Principal;
 import java.security.cert.Certificate;
 import java.util.List;
+import java.util.Objects;
 
 import javax.net.ssl.ExtendedSSLSession;
 import javax.net.ssl.SNIServerName;
@@ -17,7 +18,8 @@ final class LegacyCompatibilityExtendedSSLSession extends ExtendedSSLSession {
 
   private final ExtendedSSLSession delegate;
 
-  public LegacyCompatibilityExtendedSSLSession(ExtendedSSLSession delegate) {
+  LegacyCompatibilityExtendedSSLSession(ExtendedSSLSession delegate) {
+    Objects.requireNonNull(delegate, "delegate");
     this.delegate = delegate;
   }
 

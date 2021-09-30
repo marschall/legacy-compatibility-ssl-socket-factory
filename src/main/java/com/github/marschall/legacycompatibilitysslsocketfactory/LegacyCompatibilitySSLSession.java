@@ -2,6 +2,7 @@ package com.github.marschall.legacycompatibilitysslsocketfactory;
 
 import java.security.Principal;
 import java.security.cert.Certificate;
+import java.util.Objects;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
@@ -16,6 +17,7 @@ final class LegacyCompatibilitySSLSession implements SSLSession {
   private final SSLSession delegate;
 
   LegacyCompatibilitySSLSession(SSLSession delegate) {
+    Objects.requireNonNull(delegate, "delegate");
     this.delegate = delegate;
   }
 
