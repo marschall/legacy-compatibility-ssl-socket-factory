@@ -3,6 +3,14 @@ Legacy Compatibility SSLSocketFactory
 
 A `SSLSocketFactory` that implements `SSLSession.getPeerCertificateChain()`.
 
+Usage
+-----
+
+```java
+SSLSocketFactory socketFactory = new LegacyCompatibilitySSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
+```
+
+
 Why would you want to use this project?
 ---------------------------------------
 
