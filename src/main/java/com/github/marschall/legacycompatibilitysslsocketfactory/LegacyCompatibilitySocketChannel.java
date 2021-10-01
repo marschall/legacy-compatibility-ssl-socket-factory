@@ -11,8 +11,8 @@ import java.util.Set;
 
 final class LegacyCompatibilitySocketChannel extends SocketChannel {
 
-  private SocketChannel delegateChannel;
-  private Socket delegateSocket;
+  private final SocketChannel delegateChannel;
+  private final Socket delegateSocket;
 
   LegacyCompatibilitySocketChannel(SelectorProvider provider, SocketChannel delegateChannel, Socket socket) {
     super(provider);
@@ -20,76 +20,93 @@ final class LegacyCompatibilitySocketChannel extends SocketChannel {
     this.delegateSocket = socket;
   }
 
+  @Override
   public <T> T getOption(SocketOption<T> name) throws IOException {
-    return delegateChannel.getOption(name);
+    return this.delegateChannel.getOption(name);
   }
 
+  @Override
   public Set<SocketOption<?>> supportedOptions() {
-    return delegateChannel.supportedOptions();
+    return this.delegateChannel.supportedOptions();
   }
 
+  @Override
   public SocketChannel bind(SocketAddress local) throws IOException {
-    delegateChannel.bind(local);
+    this.delegateChannel.bind(local);
     return this;
   }
 
+  @Override
   public <T> SocketChannel setOption(SocketOption<T> name, T value) throws IOException {
-    delegateChannel.setOption(name, value);
+    this.delegateChannel.setOption(name, value);
     return this;
   }
 
+  @Override
   public SocketChannel shutdownInput() throws IOException {
-    delegateChannel.shutdownInput();
+    this.delegateChannel.shutdownInput();
     return this;
   }
 
+  @Override
   public SocketChannel shutdownOutput() throws IOException {
-    delegateChannel.shutdownOutput();
+    this.delegateChannel.shutdownOutput();
     return this;
   }
 
+  @Override
   public Socket socket() {
-    return delegateSocket;
+    return this.delegateSocket;
   }
 
+  @Override
   public boolean isConnected() {
-    return delegateChannel.isConnected();
+    return this.delegateChannel.isConnected();
   }
 
+  @Override
   public boolean isConnectionPending() {
-    return delegateChannel.isConnectionPending();
+    return this.delegateChannel.isConnectionPending();
   }
 
+  @Override
   public boolean connect(SocketAddress remote) throws IOException {
-    return delegateChannel.connect(remote);
+    return this.delegateChannel.connect(remote);
   }
 
+  @Override
   public boolean finishConnect() throws IOException {
-    return delegateChannel.finishConnect();
+    return this.delegateChannel.finishConnect();
   }
 
+  @Override
   public SocketAddress getRemoteAddress() throws IOException {
-    return delegateChannel.getRemoteAddress();
+    return this.delegateChannel.getRemoteAddress();
   }
 
+  @Override
   public int read(ByteBuffer dst) throws IOException {
-    return delegateChannel.read(dst);
+    return this.delegateChannel.read(dst);
   }
 
+  @Override
   public long read(ByteBuffer[] dsts, int offset, int length) throws IOException {
-    return delegateChannel.read(dsts, offset, length);
+    return this.delegateChannel.read(dsts, offset, length);
   }
 
+  @Override
   public int write(ByteBuffer src) throws IOException {
-    return delegateChannel.write(src);
+    return this.delegateChannel.write(src);
   }
 
+  @Override
   public long write(ByteBuffer[] srcs, int offset, int length) throws IOException {
-    return delegateChannel.write(srcs, offset, length);
+    return this.delegateChannel.write(srcs, offset, length);
   }
 
+  @Override
   public SocketAddress getLocalAddress() throws IOException {
-    return delegateChannel.getLocalAddress();
+    return this.delegateChannel.getLocalAddress();
   }
 
   @Override

@@ -18,10 +18,21 @@ public final class LegacyCompatibilitySSLSocketFactory extends SSLSocketFactory 
 
   private final SSLSocketFactory delegate;
 
+  /**
+   * Default constructor that delegates to the default SSL socket factory.
+   *
+   * @see SSLSocketFactory#getDefault()
+   */
   public LegacyCompatibilitySSLSocketFactory() {
     this((SSLSocketFactory) SSLSocketFactory.getDefault());
   }
 
+  /**
+   * Constructs a new LegacyCompatibilitySSLSocketFactory.
+   *
+   * @param delegate the SSLSocketFactory to delegate everything but {@link SSLSession#getPeerCertificateChain()} to,
+   *                 not {@code null}
+   */
   public LegacyCompatibilitySSLSocketFactory(SSLSocketFactory delegate) {
     Objects.requireNonNull(delegate, "delegate");
     this.delegate = delegate;
@@ -29,47 +40,47 @@ public final class LegacyCompatibilitySSLSocketFactory extends SSLSocketFactory 
 
   @Override
   public String[] getDefaultCipherSuites() {
-    return delegate.getDefaultCipherSuites();
+    return this.delegate.getDefaultCipherSuites();
   }
 
   @Override
   public Socket createSocket() throws IOException {
-    return new LegacyCompatibilitySSLSocket((SSLSocket) delegate.createSocket());
+    return new LegacyCompatibilitySSLSocket((SSLSocket) this.delegate.createSocket());
   }
 
   @Override
   public String[] getSupportedCipherSuites() {
-    return delegate.getSupportedCipherSuites();
+    return this.delegate.getSupportedCipherSuites();
   }
 
   @Override
   public Socket createSocket(String host, int port) throws IOException {
-    return new LegacyCompatibilitySSLSocket((SSLSocket) delegate.createSocket(host, port));
+    return new LegacyCompatibilitySSLSocket((SSLSocket) this.delegate.createSocket(host, port));
   }
 
   @Override
   public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
-    return new LegacyCompatibilitySSLSocket((SSLSocket) delegate.createSocket(s, host, port, autoClose));
+    return new LegacyCompatibilitySSLSocket((SSLSocket) this.delegate.createSocket(s, host, port, autoClose));
   }
 
   @Override
   public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
-    return new LegacyCompatibilitySSLSocket((SSLSocket) delegate.createSocket(host, port, localHost, localPort));
+    return new LegacyCompatibilitySSLSocket((SSLSocket) this.delegate.createSocket(host, port, localHost, localPort));
   }
 
   @Override
   public Socket createSocket(Socket s, InputStream consumed, boolean autoClose) throws IOException {
-    return new LegacyCompatibilitySSLSocket((SSLSocket) delegate.createSocket(s, consumed, autoClose));
+    return new LegacyCompatibilitySSLSocket((SSLSocket) this.delegate.createSocket(s, consumed, autoClose));
   }
 
   @Override
   public Socket createSocket(InetAddress host, int port) throws IOException {
-    return new LegacyCompatibilitySSLSocket((SSLSocket) delegate.createSocket(host, port));
+    return new LegacyCompatibilitySSLSocket((SSLSocket) this.delegate.createSocket(host, port));
   }
 
   @Override
   public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
-    return new LegacyCompatibilitySSLSocket((SSLSocket) delegate.createSocket(address, port, localAddress, localPort));
+    return new LegacyCompatibilitySSLSocket((SSLSocket) this.delegate.createSocket(address, port, localAddress, localPort));
   }
 
 }

@@ -28,7 +28,7 @@ import javax.net.ssl.SSLSocket;
 final class LegacyCompatibilitySSLSocket extends SSLSocket {
 
   private final SSLSocket delegate;
-  
+
   private final SocketChannel channel;
 
   LegacyCompatibilitySSLSocket(SSLSocket delegate) {
@@ -40,47 +40,47 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
     } else {
       this.channel = null;
     }
-    
+
   }
 
   @Override
   public String[] getSupportedCipherSuites() {
-    return delegate.getSupportedCipherSuites();
+    return this.delegate.getSupportedCipherSuites();
   }
 
   @Override
   public String[] getEnabledCipherSuites() {
-    return delegate.getEnabledCipherSuites();
+    return this.delegate.getEnabledCipherSuites();
   }
 
   @Override
   public void setEnabledCipherSuites(String[] suites) {
-    delegate.setEnabledCipherSuites(suites);
+    this.delegate.setEnabledCipherSuites(suites);
   }
 
   @Override
   public String[] getSupportedProtocols() {
-    return delegate.getSupportedProtocols();
+    return this.delegate.getSupportedProtocols();
   }
 
   @Override
   public String[] getEnabledProtocols() {
-    return delegate.getEnabledProtocols();
+    return this.delegate.getEnabledProtocols();
   }
 
   @Override
   public void setEnabledProtocols(String[] protocols) {
-    delegate.setEnabledProtocols(protocols);
+    this.delegate.setEnabledProtocols(protocols);
   }
 
   @Override
   public SSLSession getSession() {
-    return adaptSSLSession(delegate.getSession());
+    return adaptSSLSession(this.delegate.getSession());
   }
 
   @Override
   public SSLSession getHandshakeSession() {
-    return adaptSSLSession(delegate.getHandshakeSession());
+    return adaptSSLSession(this.delegate.getHandshakeSession());
   }
 
   private static SSLSession adaptSSLSession(SSLSession delegate) {
@@ -93,127 +93,127 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
 
   @Override
   public void addHandshakeCompletedListener(HandshakeCompletedListener listener) {
-    delegate.addHandshakeCompletedListener(listener);
+    this.delegate.addHandshakeCompletedListener(listener);
   }
 
   @Override
   public void removeHandshakeCompletedListener(HandshakeCompletedListener listener) {
-    delegate.removeHandshakeCompletedListener(listener);
+    this.delegate.removeHandshakeCompletedListener(listener);
   }
 
   @Override
   public void startHandshake() throws IOException {
-    delegate.startHandshake();
+    this.delegate.startHandshake();
   }
 
   @Override
   public void connect(SocketAddress endpoint) throws IOException {
-    delegate.connect(endpoint);
+    this.delegate.connect(endpoint);
   }
 
   @Override
   public void setUseClientMode(boolean mode) {
-    delegate.setUseClientMode(mode);
+    this.delegate.setUseClientMode(mode);
   }
 
   @Override
   public void connect(SocketAddress endpoint, int timeout) throws IOException {
-    delegate.connect(endpoint, timeout);
+    this.delegate.connect(endpoint, timeout);
   }
 
   @Override
   public boolean getUseClientMode() {
-    return delegate.getUseClientMode();
+    return this.delegate.getUseClientMode();
   }
 
   @Override
   public void setNeedClientAuth(boolean need) {
-    delegate.setNeedClientAuth(need);
+    this.delegate.setNeedClientAuth(need);
   }
 
   @Override
   public boolean getNeedClientAuth() {
-    return delegate.getNeedClientAuth();
+    return this.delegate.getNeedClientAuth();
   }
 
   @Override
   public void bind(SocketAddress bindpoint) throws IOException {
-    delegate.bind(bindpoint);
+    this.delegate.bind(bindpoint);
   }
 
   @Override
   public void setWantClientAuth(boolean want) {
-    delegate.setWantClientAuth(want);
+    this.delegate.setWantClientAuth(want);
   }
 
   @Override
   public boolean getWantClientAuth() {
-    return delegate.getWantClientAuth();
+    return this.delegate.getWantClientAuth();
   }
 
   @Override
   public void setEnableSessionCreation(boolean flag) {
-    delegate.setEnableSessionCreation(flag);
+    this.delegate.setEnableSessionCreation(flag);
   }
 
   @Override
   public InetAddress getInetAddress() {
-    return delegate.getInetAddress();
+    return this.delegate.getInetAddress();
   }
 
   @Override
   public boolean getEnableSessionCreation() {
-    return delegate.getEnableSessionCreation();
+    return this.delegate.getEnableSessionCreation();
   }
 
   @Override
   public SSLParameters getSSLParameters() {
-    return delegate.getSSLParameters();
+    return this.delegate.getSSLParameters();
   }
 
   @Override
   public InetAddress getLocalAddress() {
-    return delegate.getLocalAddress();
+    return this.delegate.getLocalAddress();
   }
 
   @Override
   public void setSSLParameters(SSLParameters params) {
-    delegate.setSSLParameters(params);
+    this.delegate.setSSLParameters(params);
   }
 
   @Override
   public int getPort() {
-    return delegate.getPort();
+    return this.delegate.getPort();
   }
 
   @Override
   public int getLocalPort() {
-    return delegate.getLocalPort();
+    return this.delegate.getLocalPort();
   }
 
   @Override
   public String getApplicationProtocol() {
-    return delegate.getApplicationProtocol();
+    return this.delegate.getApplicationProtocol();
   }
 
   @Override
   public SocketAddress getRemoteSocketAddress() {
-    return delegate.getRemoteSocketAddress();
+    return this.delegate.getRemoteSocketAddress();
   }
 
   @Override
   public String getHandshakeApplicationProtocol() {
-    return delegate.getHandshakeApplicationProtocol();
+    return this.delegate.getHandshakeApplicationProtocol();
   }
 
   @Override
   public SocketAddress getLocalSocketAddress() {
-    return delegate.getLocalSocketAddress();
+    return this.delegate.getLocalSocketAddress();
   }
 
   @Override
   public void setHandshakeApplicationProtocolSelector(BiFunction<SSLSocket, List<String>, String> selector) {
-    delegate.setHandshakeApplicationProtocolSelector(selector);
+    this.delegate.setHandshakeApplicationProtocolSelector(selector);
   }
 
   @Override
@@ -223,173 +223,173 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
 
   @Override
   public InputStream getInputStream() throws IOException {
-    return delegate.getInputStream();
+    return this.delegate.getInputStream();
   }
 
   @Override
   public BiFunction<SSLSocket, List<String>, String> getHandshakeApplicationProtocolSelector() {
-    return delegate.getHandshakeApplicationProtocolSelector();
+    return this.delegate.getHandshakeApplicationProtocolSelector();
   }
 
   @Override
   public OutputStream getOutputStream() throws IOException {
-    return delegate.getOutputStream();
+    return this.delegate.getOutputStream();
   }
 
   @Override
   public void setTcpNoDelay(boolean on) throws SocketException {
-    delegate.setTcpNoDelay(on);
+    this.delegate.setTcpNoDelay(on);
   }
 
   @Override
   public boolean getTcpNoDelay() throws SocketException {
-    return delegate.getTcpNoDelay();
+    return this.delegate.getTcpNoDelay();
   }
 
   @Override
   public void setSoLinger(boolean on, int linger) throws SocketException {
-    delegate.setSoLinger(on, linger);
+    this.delegate.setSoLinger(on, linger);
   }
 
   @Override
   public int getSoLinger() throws SocketException {
-    return delegate.getSoLinger();
+    return this.delegate.getSoLinger();
   }
 
   @Override
   public void sendUrgentData(int data) throws IOException {
-    delegate.sendUrgentData(data);
+    this.delegate.sendUrgentData(data);
   }
 
   @Override
   public void setOOBInline(boolean on) throws SocketException {
-    delegate.setOOBInline(on);
+    this.delegate.setOOBInline(on);
   }
 
   @Override
   public boolean getOOBInline() throws SocketException {
-    return delegate.getOOBInline();
+    return this.delegate.getOOBInline();
   }
 
   @Override
   public void setSoTimeout(int timeout) throws SocketException {
-    delegate.setSoTimeout(timeout);
+    this.delegate.setSoTimeout(timeout);
   }
 
   @Override
   public int getSoTimeout() throws SocketException {
-    return delegate.getSoTimeout();
+    return this.delegate.getSoTimeout();
   }
 
   @Override
   public void setSendBufferSize(int size) throws SocketException {
-    delegate.setSendBufferSize(size);
+    this.delegate.setSendBufferSize(size);
   }
 
   @Override
   public int getSendBufferSize() throws SocketException {
-    return delegate.getSendBufferSize();
+    return this.delegate.getSendBufferSize();
   }
 
   @Override
   public void setReceiveBufferSize(int size) throws SocketException {
-    delegate.setReceiveBufferSize(size);
+    this.delegate.setReceiveBufferSize(size);
   }
 
   @Override
   public int getReceiveBufferSize() throws SocketException {
-    return delegate.getReceiveBufferSize();
+    return this.delegate.getReceiveBufferSize();
   }
 
   @Override
   public void setKeepAlive(boolean on) throws SocketException {
-    delegate.setKeepAlive(on);
+    this.delegate.setKeepAlive(on);
   }
 
   @Override
   public boolean getKeepAlive() throws SocketException {
-    return delegate.getKeepAlive();
+    return this.delegate.getKeepAlive();
   }
 
   @Override
   public void setTrafficClass(int tc) throws SocketException {
-    delegate.setTrafficClass(tc);
+    this.delegate.setTrafficClass(tc);
   }
 
   @Override
   public int getTrafficClass() throws SocketException {
-    return delegate.getTrafficClass();
+    return this.delegate.getTrafficClass();
   }
 
   @Override
   public void setReuseAddress(boolean on) throws SocketException {
-    delegate.setReuseAddress(on);
+    this.delegate.setReuseAddress(on);
   }
 
   @Override
   public boolean getReuseAddress() throws SocketException {
-    return delegate.getReuseAddress();
+    return this.delegate.getReuseAddress();
   }
 
   @Override
   public void close() throws IOException {
-    delegate.close();
+    this.delegate.close();
   }
 
   @Override
   public void shutdownInput() throws IOException {
-    delegate.shutdownInput();
+    this.delegate.shutdownInput();
   }
 
   @Override
   public void shutdownOutput() throws IOException {
-    delegate.shutdownOutput();
+    this.delegate.shutdownOutput();
   }
 
   @Override
   public boolean isConnected() {
-    return delegate.isConnected();
+    return this.delegate.isConnected();
   }
 
   @Override
   public boolean isBound() {
-    return delegate.isBound();
+    return this.delegate.isBound();
   }
 
   @Override
   public boolean isClosed() {
-    return delegate.isClosed();
+    return this.delegate.isClosed();
   }
 
   @Override
   public boolean isInputShutdown() {
-    return delegate.isInputShutdown();
+    return this.delegate.isInputShutdown();
   }
 
   @Override
   public boolean isOutputShutdown() {
-    return delegate.isOutputShutdown();
+    return this.delegate.isOutputShutdown();
   }
 
   @Override
   public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {
-    delegate.setPerformancePreferences(connectionTime, latency, bandwidth);
+    this.delegate.setPerformancePreferences(connectionTime, latency, bandwidth);
   }
 
   @Override
   public <T> Socket setOption(SocketOption<T> name, T value) throws IOException {
-    delegate.setOption(name, value);
+    this.delegate.setOption(name, value);
     return this;
   }
 
   @Override
   public <T> T getOption(SocketOption<T> name) throws IOException {
-    return delegate.getOption(name);
+    return this.delegate.getOption(name);
   }
 
   @Override
   public Set<SocketOption<?>> supportedOptions() {
-    return delegate.supportedOptions();
+    return this.delegate.supportedOptions();
   }
 
 

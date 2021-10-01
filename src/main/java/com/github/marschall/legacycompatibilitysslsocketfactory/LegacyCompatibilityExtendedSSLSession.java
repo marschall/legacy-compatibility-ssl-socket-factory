@@ -25,62 +25,62 @@ final class LegacyCompatibilityExtendedSSLSession extends ExtendedSSLSession {
 
   @Override
   public byte[] getId() {
-    return delegate.getId();
+    return this.delegate.getId();
   }
 
   @Override
   public SSLSessionContext getSessionContext() {
-    return delegate.getSessionContext();
+    return this.delegate.getSessionContext();
   }
 
   @Override
   public long getCreationTime() {
-    return delegate.getCreationTime();
+    return this.delegate.getCreationTime();
   }
 
   @Override
   public long getLastAccessedTime() {
-    return delegate.getLastAccessedTime();
+    return this.delegate.getLastAccessedTime();
   }
 
   @Override
   public void invalidate() {
-    delegate.invalidate();
+    this.delegate.invalidate();
   }
 
   @Override
   public boolean isValid() {
-    return delegate.isValid();
+    return this.delegate.isValid();
   }
 
   @Override
   public void putValue(String name, Object value) {
-    delegate.putValue(name, value);
+    this.delegate.putValue(name, value);
   }
 
   @Override
   public Object getValue(String name) {
-    return delegate.getValue(name);
+    return this.delegate.getValue(name);
   }
 
   @Override
   public void removeValue(String name) {
-    delegate.removeValue(name);
+    this.delegate.removeValue(name);
   }
 
   @Override
   public String[] getValueNames() {
-    return delegate.getValueNames();
+    return this.delegate.getValueNames();
   }
 
   @Override
   public Certificate[] getPeerCertificates() throws SSLPeerUnverifiedException {
-    return delegate.getPeerCertificates();
+    return this.delegate.getPeerCertificates();
   }
 
   @Override
   public Certificate[] getLocalCertificates() {
-    return delegate.getLocalCertificates();
+    return this.delegate.getLocalCertificates();
   }
 
   @Override
@@ -97,62 +97,62 @@ final class LegacyCompatibilityExtendedSSLSession extends ExtendedSSLSession {
 
   @Override
   public Principal getPeerPrincipal() throws SSLPeerUnverifiedException {
-    return delegate.getPeerPrincipal();
+    return this.delegate.getPeerPrincipal();
   }
 
   @Override
   public Principal getLocalPrincipal() {
-    return delegate.getLocalPrincipal();
+    return this.delegate.getLocalPrincipal();
   }
 
   @Override
   public String getCipherSuite() {
-    return delegate.getCipherSuite();
+    return this.delegate.getCipherSuite();
   }
 
   @Override
   public String getProtocol() {
-    return delegate.getProtocol();
+    return this.delegate.getProtocol();
   }
 
   @Override
   public String getPeerHost() {
-    return delegate.getPeerHost();
+    return this.delegate.getPeerHost();
   }
 
   @Override
   public int getPeerPort() {
-    return delegate.getPeerPort();
+    return this.delegate.getPeerPort();
   }
 
   @Override
   public int getPacketBufferSize() {
-    return delegate.getPacketBufferSize();
+    return this.delegate.getPacketBufferSize();
   }
 
   @Override
   public int getApplicationBufferSize() {
-    return delegate.getApplicationBufferSize();
+    return this.delegate.getApplicationBufferSize();
   }
 
   @Override
   public String[] getLocalSupportedSignatureAlgorithms() {
-    return delegate.getLocalSupportedSignatureAlgorithms();
+    return this.delegate.getLocalSupportedSignatureAlgorithms();
   }
 
   @Override
   public String[] getPeerSupportedSignatureAlgorithms() {
-    return delegate.getPeerSupportedSignatureAlgorithms();
+    return this.delegate.getPeerSupportedSignatureAlgorithms();
   }
 
   @Override
   public List<SNIServerName> getRequestedServerNames() {
-    return delegate.getRequestedServerNames();
+    return this.delegate.getRequestedServerNames();
   }
 
   @Override
   public List<byte[]> getStatusResponses() {
-    return delegate.getStatusResponses();
+    return this.delegate.getStatusResponses();
   }
 
 }
