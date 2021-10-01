@@ -7,7 +7,10 @@ Usage
 -----
 
 ```java
-SSLSocketFactory socketFactory = new LegacyCompatibilitySSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
+SSLSocketFactory socketFactory = new LegacyCompatibilitySSLSocketFactory();
+
+// or whatever other object
+urlConnection.setSSLSocketFactory(socketFactory);
 ```
 
 
@@ -21,5 +24,4 @@ Why would you have to use this project?
 
 You want to migrate to Java 17 but rely on a third party dependency that calls [SSLSession.getPeerCertificateChain()](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/javax/net/ssl/SSLSession.html#getPeerCertificateChain()).
 
-
-[JDK-8241047](https://bugs.openjdk.java.net/browse/JDK-8241047)
+See [JDK-8241047](https://bugs.openjdk.java.net/browse/JDK-8241047) for details.

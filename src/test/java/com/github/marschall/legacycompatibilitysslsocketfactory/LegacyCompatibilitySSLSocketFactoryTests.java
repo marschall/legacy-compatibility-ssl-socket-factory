@@ -21,7 +21,7 @@ class LegacyCompatibilitySSLSocketFactoryTests {
   void getPeerCertificateChain() throws IOException {
     URL badssl = new URL("https://badssl.com");
     HttpsURLConnection urlConnection = (HttpsURLConnection) badssl.openConnection();
-    SSLSocketFactory socketFactory = new LegacyCompatibilitySSLSocketFactory((SSLSocketFactory) SSLSocketFactory.getDefault());
+    SSLSocketFactory socketFactory = new LegacyCompatibilitySSLSocketFactory();
     urlConnection.setSSLSocketFactory(socketFactory);
     urlConnection.connect();
     try (InputStream inputStream = urlConnection.getInputStream()) {

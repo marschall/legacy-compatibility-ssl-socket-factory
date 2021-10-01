@@ -18,6 +18,10 @@ public final class LegacyCompatibilitySSLSocketFactory extends SSLSocketFactory 
 
   private final SSLSocketFactory delegate;
 
+  public LegacyCompatibilitySSLSocketFactory() {
+    this((SSLSocketFactory) SSLSocketFactory.getDefault());
+  }
+
   public LegacyCompatibilitySSLSocketFactory(SSLSocketFactory delegate) {
     Objects.requireNonNull(delegate, "delegate");
     this.delegate = delegate;
