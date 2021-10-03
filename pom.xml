@@ -4,7 +4,7 @@
 
   <groupId>com.github.marschall</groupId>
   <artifactId>legacy-compatibility-ssl-socket-factory</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <inceptionYear>2021</inceptionYear>
   <url>https://github.com/marschall/legacy-compatibility-ssl-socket-factory</url>
   <name>Legacy Compatibility SSLSocketFactory</name>
@@ -45,7 +45,7 @@
     <connection>scm:git:git@github.com:marschall/legacy-compatibility-ssl-socket-factory.git</connection>
     <developerConnection>scm:git:git@github.com:marschall/legacy-compatibility-ssl-socket-factory.git</developerConnection>
     <url>${project.url}</url>
-    <tag>HEAD</tag>
+    <tag>0.1.0</tag>
   </scm>
 
   <build>
