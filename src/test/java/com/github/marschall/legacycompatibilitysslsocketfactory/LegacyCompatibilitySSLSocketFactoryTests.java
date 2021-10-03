@@ -1,6 +1,7 @@
 package com.github.marschall.legacycompatibilitysslsocketfactory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ class LegacyCompatibilitySSLSocketFactoryTests {
       Optional<SSLSession> maybeSslSession = urlConnection.getSSLSession();
       assertTrue(maybeSslSession.isPresent());
       SSLSession sslSession = maybeSslSession.get();
+      assertSame(LegacyCompatibilityExtendedSSLSession.class, sslSession.getClass(), "SSLSession class");
       X509Certificate[] peerCertificateChain = sslSession.getPeerCertificateChain();
       assertNotNull(peerCertificateChain);
       assertTrue(peerCertificateChain.length > 0);
