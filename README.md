@@ -6,6 +6,14 @@ A `SSLSocketFactory` that implements `SSLSession.getPeerCertificateChain()`.
 Usage
 -----
 
+```xml
+<dependency>
+  <groupId>com.github.marschall</groupId>
+  <artifactId>legacy-compatibility-ssl-socket-factory</artifactId>
+  <version>0.1.0</version>
+</dependency>
+```
+
 ```java
 SSLSocketFactory socketFactory = new LegacyCompatibilitySSLSocketFactory();
 
