@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Objects;
 
+import javax.net.SocketFactory;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -36,6 +37,21 @@ public final class LegacyCompatibilitySSLSocketFactory extends SSLSocketFactory 
   public LegacyCompatibilitySSLSocketFactory(SSLSocketFactory delegate) {
     Objects.requireNonNull(delegate, "delegate");
     this.delegate = delegate;
+  }
+
+  private static final class DefaultInstanceHolder {
+
+    static final SocketFactory DEFAULT_INSTANCE = new LegacyCompatibilitySSLSocketFactory();
+  }
+
+  /**
+   * Returns the default instance of this class.
+   *
+   * @return the default instance of this class
+   * @see SocketFactory#getDefault()
+   */
+  public static SocketFactory getDefault() {
+    return DefaultInstanceHolder.DEFAULT_INSTANCE;
   }
 
   @Override

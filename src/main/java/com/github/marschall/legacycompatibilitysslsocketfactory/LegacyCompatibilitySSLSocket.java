@@ -9,12 +9,17 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketOption;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
 
 import javax.net.ssl.ExtendedSSLSession;
+import javax.net.ssl.HandshakeCompletedEvent;
 import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLSession;
@@ -31,6 +36,10 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
 
   private final SocketChannel channel;
 
+  private Map<HandshakeCompletedListener, HandshakeCompletedListener> listenerMap;
+
+  private final Lock listenerLock;
+
   LegacyCompatibilitySSLSocket(SSLSocket delegate) {
     Objects.requireNonNull(delegate, "delegate");
     this.delegate = delegate;
@@ -40,7 +49,7 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
     } else {
       this.channel = null;
     }
-
+    this.listenerLock = new ReentrantLock();
   }
 
   @Override
@@ -93,12 +102,41 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
 
   @Override
   public void addHandshakeCompletedListener(HandshakeCompletedListener listener) {
+    if (listener == null) {
+      throw new IllegalArgumentException("listener must not beu null");
+    }
+    this.listenerLock.lock();
+    try {
+      if (this.listenerMap == null) {
+        this.listenerMap = new HashMap<>(4);
+      }
+      HandshakeCompletedListenerAdapter listenerAdapter = new HandshakeCompletedListenerAdapter(this, listener);
+      this.listenerMap.put(listener, listenerAdapter);
+      this.delegate.addHandshakeCompletedListener(listenerAdapter);
+    } finally {
+      this.listenerLock.unlock();
+    }
     this.delegate.addHandshakeCompletedListener(listener);
   }
 
   @Override
   public void removeHandshakeCompletedListener(HandshakeCompletedListener listener) {
-    this.delegate.removeHandshakeCompletedListener(listener);
+    if (listener == null) {
+      throw new IllegalArgumentException("listener must not beu null");
+    }
+    this.listenerLock.lock();
+    try {
+      if (this.listenerMap == null) {
+        throw new IllegalArgumentException("listener not registered");
+      }
+      HandshakeCompletedListener listenerAdapter = this.listenerMap.remove(listener);
+      if (listenerAdapter == null) {
+        throw new IllegalArgumentException("listener not registered");
+      }
+      this.delegate.removeHandshakeCompletedListener(listenerAdapter);
+    } finally {
+      this.listenerLock.unlock();
+    }
   }
 
   @Override
@@ -392,6 +430,23 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
     return this.delegate.supportedOptions();
   }
 
+  static final class HandshakeCompletedListenerAdapter implements HandshakeCompletedListener {
 
+    private final SSLSocket legacyCompatibilitySocket;
+
+    private final HandshakeCompletedListener delegateListenger;
+
+    HandshakeCompletedListenerAdapter(SSLSocket legacyCompatibilitySocket, HandshakeCompletedListener delegate) {
+      this.legacyCompatibilitySocket = legacyCompatibilitySocket;
+      this.delegateListenger = delegate;
+    }
+
+    @Override
+    public void handshakeCompleted(HandshakeCompletedEvent event) {
+      HandshakeCompletedEvent compatibleEvent = new HandshakeCompletedEvent(this.legacyCompatibilitySocket, legacyCompatibilitySocket.getSession());
+      this.delegateListenger.handshakeCompleted(compatibleEvent);
+    }
+
+  }
 
 }
