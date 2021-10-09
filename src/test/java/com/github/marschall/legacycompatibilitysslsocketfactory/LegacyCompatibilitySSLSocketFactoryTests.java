@@ -55,7 +55,7 @@ class LegacyCompatibilitySSLSocketFactoryTests {
     // HandshakeCompletedEvent seems to be delivered asynchronously in a different thread
     // is condition is signaled when the event is delivered to avoid unnecessary waiting
     Condition isSet = lock.newCondition();
-    AtomicReference<HandshakeCompletedEvent> eventHolder = new AtomicReference();
+    AtomicReference<HandshakeCompletedEvent> eventHolder = new AtomicReference<>();
     try (var sslSocket = (SSLSocket) socketFactory.createSocket("badssl.com", 443)) {
       HandshakeCompletedListener listener = event -> {
         eventHolder.set(event);
@@ -69,14 +69,17 @@ class LegacyCompatibilitySSLSocketFactoryTests {
       sslSocket.addHandshakeCompletedListener(listener);
       sslSocket.startHandshake();
       var sslSession = sslSocket.getSession();
+      assertSame(sslSession, sslSocket.getSession());
       X509Certificate[] peerCertificateChain = sslSession.getPeerCertificateChain();
       assertNotNull(peerCertificateChain);
       assertTrue(peerCertificateChain.length > 0);
-      
+
       lock.lock();
       try {
-        // wait at most a second for the event
-        assertTrue(isSet.await(1L, TimeUnit.SECONDS));
+        if (eventHolder.get() == null) {
+          // only wait if not already set
+          assertTrue(isSet.await(1L, TimeUnit.SECONDS));
+        }
       } finally {
         lock.unlock();
       }
@@ -84,6 +87,7 @@ class LegacyCompatibilitySSLSocketFactoryTests {
       HandshakeCompletedEvent event = eventHolder.get();
       assertNotNull(event);
       assertSame(sslSocket, event.getSocket());
+      assertSame(sslSession, event.getSession());
       assertArrayEquals(peerCertificateChain, event.getPeerCertificateChain());
       // will throw if instance is not registered
       sslSocket.removeHandshakeCompletedListener(listener);

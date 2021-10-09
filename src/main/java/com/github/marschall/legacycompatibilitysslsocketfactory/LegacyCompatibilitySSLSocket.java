@@ -39,6 +39,12 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
   private Map<HandshakeCompletedListener, HandshakeCompletedListener> listenerMap;
 
   private final Lock listenerLock;
+  
+  private final Lock sessionLock;
+  
+  private SSLSession sslSession;
+  
+  private SSLSession handshakeSession;
 
   LegacyCompatibilitySSLSocket(SSLSocket delegate) {
     Objects.requireNonNull(delegate, "delegate");
@@ -50,6 +56,7 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
       this.channel = null;
     }
     this.listenerLock = new ReentrantLock();
+    this.sessionLock = new ReentrantLock();
   }
 
   @Override
@@ -84,12 +91,38 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
 
   @Override
   public SSLSession getSession() {
-    return adaptSSLSession(this.delegate.getSession());
+    this.sessionLock.lock();
+    try {
+      if (this.sslSession != null) {
+        return this.sslSession;
+      }
+      SSLSession delegateSession = this.delegate.getSession();
+      if (delegateSession != null) {
+        this.sslSession = adaptSSLSession(delegateSession);
+        return this.sslSession;
+      }
+      return null;
+    } finally {
+      this.sessionLock.unlock();
+    }
   }
 
   @Override
   public SSLSession getHandshakeSession() {
-    return adaptSSLSession(this.delegate.getHandshakeSession());
+    this.sessionLock.lock();
+    try {
+      if (this.handshakeSession != null) {
+        return this.handshakeSession;
+      }
+      SSLSession delegateSession = this.delegate.getHandshakeSession();
+      if (delegateSession != null) {
+        this.handshakeSession = adaptSSLSession(delegateSession);
+        return this.handshakeSession;
+      }
+      return null;
+    } finally {
+      this.sessionLock.unlock();
+    }
   }
 
   private static SSLSession adaptSSLSession(SSLSession delegate) {
@@ -116,7 +149,6 @@ final class LegacyCompatibilitySSLSocket extends SSLSocket {
     } finally {
       this.listenerLock.unlock();
     }
-    this.delegate.addHandshakeCompletedListener(listener);
   }
 
   @Override
