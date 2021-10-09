@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -51,21 +51,9 @@ class LegacyCompatibilitySSLSocketFactoryTests {
   @Test
   void createSocket() throws Exception {
     SSLSocketFactory socketFactory = new LegacyCompatibilitySSLSocketFactory();
-    ReentrantLock lock = new ReentrantLock();
-    // HandshakeCompletedEvent seems to be delivered asynchronously in a different thread
-    // is condition is signaled when the event is delivered to avoid unnecessary waiting
-    Condition isSet = lock.newCondition();
-    AtomicReference<HandshakeCompletedEvent> eventHolder = new AtomicReference<>();
+    EventHolder eventHolder = new EventHolder();
     try (var sslSocket = (SSLSocket) socketFactory.createSocket("badssl.com", 443)) {
-      HandshakeCompletedListener listener = event -> {
-        eventHolder.set(event);
-        lock.lock();
-        try {
-          isSet.signal();
-        } finally {
-          lock.unlock();
-        }
-      };
+      HandshakeCompletedListener listener = eventHolder::set;
       sslSocket.addHandshakeCompletedListener(listener);
       sslSocket.startHandshake();
       var sslSession = sslSocket.getSession();
@@ -73,16 +61,6 @@ class LegacyCompatibilitySSLSocketFactoryTests {
       X509Certificate[] peerCertificateChain = sslSession.getPeerCertificateChain();
       assertNotNull(peerCertificateChain);
       assertTrue(peerCertificateChain.length > 0);
-
-      lock.lock();
-      try {
-        if (eventHolder.get() == null) {
-          // only wait if not already set
-          assertTrue(isSet.await(1L, TimeUnit.SECONDS));
-        }
-      } finally {
-        lock.unlock();
-      }
 
       HandshakeCompletedEvent event = eventHolder.get();
       assertNotNull(event);
@@ -92,6 +70,48 @@ class LegacyCompatibilitySSLSocketFactoryTests {
       // will throw if instance is not registered
       sslSocket.removeHandshakeCompletedListener(listener);
     }
+  }
+
+  static final class EventHolder {
+
+    private HandshakeCompletedEvent event;
+    private final ReentrantLock lock;
+    private final Condition isSet;
+
+    EventHolder() {
+      this.lock = new ReentrantLock();
+      // HandshakeCompletedEvent seems to be delivered asynchronously in a different thread
+      // this condition is signaled when the event is delivered to avoid unnecessary waiting
+      this.isSet = this.lock.newCondition();
+    }
+
+    void set(HandshakeCompletedEvent event) {
+      Objects.requireNonNull(event);
+      this.lock.lock();
+      try {
+        if (this.event != null) {
+          throw new IllegalStateException("event can be set only once");
+        }
+        this.event = event;
+        this.isSet.signal();
+      } finally {
+        this.lock.unlock();
+      }
+    }
+
+    HandshakeCompletedEvent get() throws InterruptedException {
+      this.lock.lock();
+      try {
+        if (this.event == null) {
+          // only wait if not already set
+          assertTrue(this.isSet.await(1L, TimeUnit.SECONDS));
+        }
+        return this.event;
+      } finally {
+        this.lock.unlock();
+      }
+    }
+
   }
 
 }
