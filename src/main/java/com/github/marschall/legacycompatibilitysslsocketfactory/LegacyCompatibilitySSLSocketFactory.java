@@ -14,6 +14,8 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * A {@link SSLSocketFactory} that delegates to a {@link SSLSocketFactory} but provides a
  * {@link SSLSession} that implements {@link SSLSession#getPeerCertificateChain()}.
+ * 
+ * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8241047">JDK-8241047</a>
  */
 public final class LegacyCompatibilitySSLSocketFactory extends SSLSocketFactory {
 
