@@ -1,4 +1,4 @@
-Legacy Compatibility SSLSocketFactory [![javadoc](https://javadoc.io/badge2/com.github.marschall/legacy-compatibility-ssl-socket-factory/javadoc.svg)](https://javadoc.io/doc/com.github.marschall/legacy-compatibility-ssl-socket-factory)
+Legacy Compatibility SSLSocketFactory [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.marschall/legacy-compatibility-ssl-socket-factory/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.marschall/legacy-compatibility-ssl-socket-factory) [![javadoc](https://javadoc.io/badge2/com.github.marschall/legacy-compatibility-ssl-socket-factory/javadoc.svg)](https://javadoc.io/doc/com.github.marschall/legacy-compatibility-ssl-socket-factory)
 =====================================
 
 A `SSLSocketFactory` that implements `SSLSession.getPeerCertificateChain()`.
